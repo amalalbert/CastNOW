@@ -14,6 +14,7 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
 import androidx.tv.material3.SurfaceDefaults
 import com.innovature.castnow.api.ImageApi
+import com.innovature.castnow.di.RetrofitManager
 import com.innovature.castnow.ui.screens.Slideshow
 import com.innovature.castnow.ui.theme.CastNOWTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var imageApi: ImageApi
+    lateinit var retrofitManager: RetrofitManager
 
     @OptIn(ExperimentalTvMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Slideshow(imageApi)
+                        Slideshow(retrofitManager.getImageApi())
                     }
                 }
             }
