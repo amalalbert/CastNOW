@@ -1,0 +1,92 @@
+{
+  "project_info": {
+    "project_number": "967723210353",
+    "project_id": "ai-app-9164b",
+    "storage_bucket": "ai-app-9164b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967723210353:android:785375351a85cf6db02dd0",
+        "android_client_info": {
+          "package_name": "com.innovature.castnow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967723210353-kvtoafsulblko94s8c02809gmama884r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHUS38Pbn421kkWi7J1wuVtJdtDNfko-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967723210353-kvtoafsulblko94s8c02809gmama884r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967723210353:android:b91f7f92e930b7f1b02dd0",
+        "android_client_info": {
+          "package_name": "com.innovature.tfLitetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967723210353-06utg09tavumf8dnji8em70vtgd5t334.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.innovature.tfLitetest",
+            "certificate_hash": "d439144e4a380130392f51a0cc041fa8c33790e5"
+          }
+        },
+        {
+          "client_id": "967723210353-3nb64ggg3s1ofibfqfdt13v02qkac4fe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.innovature.tfLitetest",
+            "certificate_hash": "53112404e55f490a0dce71182d75869ded0fa9df"
+          }
+        },
+        {
+          "client_id": "967723210353-iqbj8s9pf63alpvbt36jd3e4qkcktdq3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.innovature.tfLitetest",
+            "certificate_hash": "56ddb2913bfe81c2abba43218ef44518218b523b"
+          }
+        },
+        {
+          "client_id": "967723210353-kvtoafsulblko94s8c02809gmama884r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHUS38Pbn421kkWi7J1wuVtJdtDNfko-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967723210353-kvtoafsulblko94s8c02809gmama884r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
