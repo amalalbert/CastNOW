@@ -16,8 +16,7 @@ class RetrofitManager @Inject constructor() {
     private var retrofit: Retrofit? = null
 
     @Volatile
-    private var currentBaseUrl =
-        "http://10.10.13.82:8000/"
+    private var currentBaseUrl = "http://10.10.13.82:8000/"
 
     private fun createRetrofit(): Retrofit {
         return Retrofit.Builder()
@@ -28,12 +27,11 @@ class RetrofitManager @Inject constructor() {
     }
 
     fun updateBaseUrl(newUrl: String) {
-        currentBaseUrl =
-            if (newUrl.endsWith("/")) newUrl
-            else "$newUrl/"
-
+        currentBaseUrl = if (newUrl.endsWith("/")) newUrl else "$newUrl/"
         retrofit = createRetrofit()
     }
+
+    fun getBaseUrl(): String = currentBaseUrl
 
     fun getImageApi(): ImageApi {
         if (retrofit == null) {
