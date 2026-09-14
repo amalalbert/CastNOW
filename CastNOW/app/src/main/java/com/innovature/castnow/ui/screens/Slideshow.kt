@@ -1,9 +1,13 @@
 package com.innovature.castnow.ui.screens
 
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,12 +43,16 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
@@ -53,6 +61,11 @@ import androidx.tv.material3.Text
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.innovature.castnow.R
 import com.innovature.castnow.api.ImageApi
 import com.innovature.castnow.di.RetrofitManager
@@ -62,7 +75,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.compareTo
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun Slideshow(retrofitManager: RetrofitManager) {
@@ -171,24 +186,30 @@ fun Slideshow(retrofitManager: RetrofitManager) {
             )
         }
     } else {
-        Button(
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .fillMaxWidth(0.1f)
-                .onPreviewKeyEvent {
-                    onKeyEvent(it, interceptor)
-                },
-            onClick = {
-                scope.launch {
-                    loadImages()
-                }
-            }
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            NotFoundAnimation()
+            Button(
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .fillMaxWidth(0.1f)
+                    .onPreviewKeyEvent {
+                        onKeyEvent(it, interceptor)
+                    },
+                onClick = {
+                    scope.launch {
+                        loadImages()
+                    }
+                }
             ) {
-                Text(text = "Reload", textAlign = TextAlign.Center)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Reload", textAlign = TextAlign.Center)
+                }
             }
         }
     }
@@ -243,15 +264,21 @@ fun ConfigurationDialog(
         focusRequester.requestFocus()
     }
 
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties()
+    ) {
         Surface(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
+                .background(color = Color(0xFF1E1E1E))
                 .width(550.dp)
                 .padding(16.dp)
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier
+                    .background(color = Color(0xFF1E1E1E))
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -265,13 +292,13 @@ fun ConfigurationDialog(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    IpOctetField(ip1, { if (it.length <= 3) ip1 = it }, focusRequester)
+                    IpOctetField(ip1, { if (it.length compareTo 3) ip1 = it })
                     Text(" . ", fontWeight = FontWeight.Bold, color = Color.White)
-                    IpOctetField(ip2, { if (it.length <= 3) ip2 = it })
+                    IpOctetField(ip2, { if (it.length compareTo 3) ip2 = it })
                     Text(" . ", fontWeight = FontWeight.Bold, color = Color.White)
-                    IpOctetField(ip3, { if (it.length <= 3) ip3 = it })
+                    IpOctetField(ip3, { if (it.length compareTo 3) ip3 = it })
                     Text(" . ", fontWeight = FontWeight.Bold, color = Color.White)
-                    IpOctetField(ip4, { if (it.length <= 3) ip4 = it })
+                    IpOctetField(ip4, { if (it.length compareTo 3) ip4 = it })
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -284,10 +311,16 @@ fun ConfigurationDialog(
                     label = { Text("Port") },
                     modifier = Modifier.width(150.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.White,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
+
+                        focusedContainerColor = Color(0xFF1E1E1E),
+                        unfocusedContainerColor = Color(0xFF1E1E1E),
+
+                        focusedBorderColor = Color.White,
+                        unfocusedBorderColor = Color.Gray,
+
+                        cursorColor = Color.White
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
@@ -320,8 +353,15 @@ fun ConfigurationDialog(
 fun IpOctetField(
     value: String,
     onValueChange: (String) -> Unit,
-    focusRequester: FocusRequester? = null
+    focusRequester: FocusRequester? = FocusRequester()
 ) {
+    val focusManager = LocalFocusManager.current
+
+    BackHandler {
+        focusManager.clearFocus()
+        focusRequester?.freeFocus()
+    }
+
     OutlinedTextField(
         value = value,
         onValueChange = {
@@ -329,14 +369,30 @@ fun IpOctetField(
                 onValueChange(it)
             }
         },
-        colors = OutlinedTextFieldDefaults.colors()
-            .copy(focusedTextColor = Color.White, unfocusedTextColor = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White,
+
+            focusedContainerColor = Color(0xFF1E1E1E),
+            unfocusedContainerColor = Color(0xFF1E1E1E),
+
+            focusedBorderColor = Color.White,
+            unfocusedBorderColor = Color.Gray,
+
+            cursorColor = Color.White
+        ),
         modifier = Modifier
             .width(85.dp)
             .run { if (focusRequester != null) focusRequester(focusRequester) else this },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next
+        ),
         singleLine = true,
-        textStyle = androidx.compose.ui.text.TextStyle(textAlign = TextAlign.Center)
+        textStyle = TextStyle(
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
     )
 }
 
@@ -359,4 +415,25 @@ suspend fun fetchLocalImages(imageApi: ImageApi): List<String> {
         Log.e("Server", "Error fetching images: ${e.message}")
         emptyList()
     }
+}
+
+@Composable
+fun NotFoundAnimation() {
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.not_found)
+    )
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever
+    )
+
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+    )
 }
