@@ -16,7 +16,7 @@ class RetrofitManager @Inject constructor() {
     private var retrofit: Retrofit? = null
 
     @Volatile
-    private var currentBaseUrl = "http://10.10.13.82:8000/"
+    private var currentBaseUrl = "https://imageserver-3hza.onrender.com/"
 
     private fun createRetrofit(): Retrofit {
         return Retrofit.Builder()
