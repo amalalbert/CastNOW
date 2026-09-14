@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrofitProvider @Inject constructor(
-    private val okHttpClient: OkHttpClient
+    private val okHttpProvider: OkHttpProvider
 ) {
 
     private var retrofit: Retrofit? = null
@@ -27,7 +27,7 @@ class RetrofitProvider @Inject constructor(
 
             retrofit = Retrofit.Builder()
                 .baseUrl(normalizedUrl)
-                .client(okHttpClient)
+                .client(okHttpProvider.provideOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
