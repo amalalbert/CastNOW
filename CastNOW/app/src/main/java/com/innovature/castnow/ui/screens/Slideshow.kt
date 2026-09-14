@@ -1,10 +1,8 @@
 package com.innovature.castnow.ui.screens
 
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -75,9 +73,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.compareTo
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun Slideshow(retrofitManager: RetrofitManager) {
@@ -86,11 +82,11 @@ fun Slideshow(retrofitManager: RetrofitManager) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    suspend fun loadImages() {
+    suspend fun loadImages(imageApi: ImageApi) {
         withContext(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.e("error", "Slideshow: ${throwable.message}")
         }) {
-            val images = fetchLocalImages(retrofitManager.getImageApi())
+            val images = fetchLocalImages(imageApi)
             withContext(Dispatchers.Main) {
                 fileList.clear()
                 fileList.addAll(images)
@@ -131,7 +127,7 @@ fun Slideshow(retrofitManager: RetrofitManager) {
     }
 
     LaunchedEffect(refreshTrigger) {
-        loadImages()
+        loadImages(retrofitManager.getImageApi())
     }
 
     // Slideshow cycling logic
@@ -200,7 +196,7 @@ fun Slideshow(retrofitManager: RetrofitManager) {
                     },
                 onClick = {
                     scope.launch {
-                        loadImages()
+                        loadImages(retrofitManager.getImageApi())
                     }
                 }
             ) {
@@ -292,13 +288,13 @@ fun ConfigurationDialog(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    IpOctetField(ip1, { if (it.length compareTo 3) ip1 = it })
+                    IpOctetField(ip1, { if (it.length == 3) ip1 = it })
                     Text(" . ", fontWeight = FontWeight.Bold, color = Color.White)
-                    IpOctetField(ip2, { if (it.length compareTo 3) ip2 = it })
+                    IpOctetField(ip2, { if (it.length == 3) ip2 = it })
                     Text(" . ", fontWeight = FontWeight.Bold, color = Color.White)
-                    IpOctetField(ip3, { if (it.length compareTo 3) ip3 = it })
+                    IpOctetField(ip3, { if (it.length == 3) ip3 = it })
                     Text(" . ", fontWeight = FontWeight.Bold, color = Color.White)
-                    IpOctetField(ip4, { if (it.length compareTo 3) ip4 = it })
+                    IpOctetField(ip4, { if (it.length == 3) ip4 = it })
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

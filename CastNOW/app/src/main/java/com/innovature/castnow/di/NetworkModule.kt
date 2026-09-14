@@ -18,17 +18,24 @@ NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://imageserver-3hza.onrender.com/")
-            .client(OkHttpClient.Builder().build())
-            .addConverterFactory(GsonConverterFactory.create())
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideImageApi(retrofit: Retrofit): ImageApi {
-        return retrofit.create(ImageApi::class.java)
+    fun provideRetrofitProvider(
+        okHttpClient: OkHttpClient
+    ): RetrofitProvider {
+        return RetrofitProvider(okHttpClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebSocketManager(
+        okHttpClient: OkHttpClient
+    ): WebSocketManager {
+        return WebSocketManager(okHttpClient)
     }
 }
